@@ -5,7 +5,7 @@ name text PRIMARY KEY
 ); """
 
 samples = """ CREATE TABLE IF NOT EXISTS samples (
-name text text NOT NULL,
+name text NOT NULL,
 project_name text NOT NULL,
 PRIMARY KEY (name, project_name),
 FOREIGN KEY (project_name) REFERENCES projects (name)

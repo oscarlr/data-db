@@ -21,18 +21,32 @@ def create_table(conn, create_table_sql):
     except Error as e:
         print(e)
 
+def add_sql_entries(conn,entries,sql):
+    for entry in entries:
+        cur = conn.cursor()
+        cur.execute(sql,entry)
+        conn.commit()
+
 def add_probes_entries(conn):
     probes = [
-        ["V4","IGHV,IGL,TCRA,TCRB"],
-        ["V3","IGHV"]
+        ("V4","IGHV,IGL,TCRA,TCRB"),
+        ("V3","IGHV")
     ]
     sql = ''' INSERT INTO probes (name,loci)
               VALUES(?,?) '''
-    for name,loci in probes:
-        cur = conn.cursor()
-        cur.execute(sql,(name,loci))
-        conn.commit()
+    add_sql_entries(conn,probes,sql)
 
+def add_project_entries(conn):
+    projects = [
+        ("Wayne-Flu",),
+        ("Boyd-Healthy",),
+        ("STEMCELL",),
+        ("1KG",),
+        ("GIAB",)
+    ]
+    sql = ''' INSERT INTO projects (name)
+              VALUES(?) '''
+    add_sql_entries(conn,projects,sql)
 
 def add_tables():
     from data_db.tables.tables import samples,capture,projects,probes
@@ -45,6 +59,7 @@ def add_tables():
          create_table(conn,table)
 
     add_probes_entries(conn)
+    add_project_entries(conn)
 
     conn.close()
     
