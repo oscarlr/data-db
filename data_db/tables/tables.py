@@ -7,6 +7,7 @@ name text PRIMARY KEY
 samples = """ CREATE TABLE IF NOT EXISTS samples (
 name text NOT NULL,
 project_name text NOT NULL,
+population text,
 PRIMARY KEY (name, project_name),
 FOREIGN KEY (project_name) REFERENCES projects (name)
 ); """
@@ -19,6 +20,7 @@ loci text NOT NULL
 capture = """ CREATE TABLE IF NOT EXISTS capture (
 data_path text PRIMARY KEY,
 sample_name integer NOT NULL,
+dna_source text NOT NULL,
 probes text NOT NULL,
 date_added date NOT NULL,
 sequencing_plex integer NOT NULL,
