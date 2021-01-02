@@ -7,6 +7,7 @@ name text PRIMARY KEY
 samples = """ CREATE TABLE IF NOT EXISTS samples (
 name text NOT NULL,
 project_name text NOT NULL,
+ethnicity text,
 population text,
 PRIMARY KEY (name, project_name),
 FOREIGN KEY (project_name) REFERENCES projects (name)
@@ -24,8 +25,6 @@ dna_source text NOT NULL,
 probes text NOT NULL,
 date_added date NOT NULL,
 sequencing_plex integer NOT NULL,
-number_reads integer NOT NULL,
-number_bases integer NOT NULL,
 FOREIGN KEY (sample_name) REFERENCES samples (name),
 FOREIGN KEY (probes) REFERENCES probes (name)
 ); """

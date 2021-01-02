@@ -7,6 +7,8 @@ import importlib
 
 from sqlite3 import Error
 
+from data_db.common import add_sql_entries
+
 DB_PATH = "data.db"
 
 def create_table(conn, create_table_sql):
@@ -21,18 +23,12 @@ def create_table(conn, create_table_sql):
     except Error as e:
         print(e)
 
-def add_sql_entries(conn,entries,sql):
-    for entry in entries:
-        cur = conn.cursor()
-        cur.execute(sql,entry)
-        conn.commit()
-
 def add_probes_entries(conn):
     probes = [
         ("V4","IGHV,IGL,TCRA,TCRB"),
         ("V3","IGHV")
     ]
-    sql = ''' INSERT INTO probes (name,loci)
+    sql = ''' INSERT OR IGNORE INTO probes (name,loci)
               VALUES(?,?) '''
     add_sql_entries(conn,probes,sql)
 
@@ -44,48 +40,57 @@ def add_project_entries(conn):
         ("1KG",),
         ("GIAB",)
     ]
-    sql = ''' INSERT INTO projects (name)
+    sql = ''' INSERT OR IGNORE INTO projects (name)
               VALUES(?) '''
     add_sql_entries(conn,projects,sql)
 
-def add_tables():
+def add_tables(conn):
     from data_db.tables.tables import samples,capture,projects,probes
 
     tables = [samples,capture,projects,probes]
     
-    conn = sqlite3.connect(DB_PATH)
-
     for table in tables:
          create_table(conn,table)
 
     add_probes_entries(conn)
     add_project_entries(conn)
 
-    conn.close()
     
-def create_db():
-    conn = sqlite3.connect(DB_PATH)
-    conn.close()
+def open_db(db_path):
+    if not os.path.isfile(db_path):
+        print "Creating %s..." % db_path
+    conn = sqlite3.connect(db_path)
+    return conn
 
 def main():
     commands = [
-        "stats"
+        "stats",
+        "add"
     ]
 
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 3:
         sys.exit("Please run one of the following commands: \n%s" % "\n".join(commands))
 
-    command_name = sys.argv[1]
+    db_path = sys.argv[1]
+    command_name = sys.argv[2]
 
     if command_name not in commands:
         sys.exit("Please run one of the following commands: \n%s" % "\n".join(commands))
 
-    if not os.path.isfile(DB_PATH):
-        create_db()
 
-    add_tables()
-    # parser = argparse.ArgumentParser()
-    # command = importlib.import_module('.%s' % command_name, "data-db.commands")
+    conn = open_db(db_path)
 
-    # args = parser.parse_args(sys.argv[1:])
-    # command.main(args)
+    add_tables(conn)
+
+    parser = argparse.ArgumentParser(description='')
+    subparsers = parser.add_subparsers()
+
+    command = importlib.import_module('.%s' % command_name, "data_db.commands")
+    subparser = subparsers.add_parser(command_name)
+    command.add_arguments(subparser)
+
+
+    args = parser.parse_args(sys.argv[2:])
+    command.main(args,conn)
+
+    conn.close()
