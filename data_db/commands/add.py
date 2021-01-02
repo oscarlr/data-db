@@ -10,15 +10,21 @@ def add_arguments(subparser):
     subparser.add_argument('samples',metavar='SAMPLES',help='samples fofn')
     subparser.add_argument('data',metavar='DATA',help='data fofn')
 
-def check_sample_header(header):
-    if "sample" not in header:
-        sys.exit("%s does not contain sample" % samplefofn)
-    if "project" not in header:
-        sys.exit("%s does not contain project" % samplefofn)
-    if "ethnicity" not in header:
-        print "%s does not contain ethnicity. Continuing... " % samplefofn
+def check_data_header(header,entries):
+    for entry in entries:
+        if entry not in header:
+            sys.exit("%s not found" % entry)
+
+def check_table(conn,table,column,value):
+    cur = conn.cursor()
+    command = "SELECT * FROM %s WHERE %s=?" % (table,column)
+    cur.execute(command, (value,))
+    rows = cur.fetchall()
+    if len(rows) == 0:
+        sys.exit("%s not found in table %s column %s" % (value,table,column))
 
 def add_samples(samplefofn,conn):
+    print "Going through %s..." % samplefofn
     samples = []
     possible_entries = ["sample","project","ethnicity","population"]
     with open(samplefofn,'r') as samplefofh:
@@ -26,10 +32,12 @@ def add_samples(samplefofn,conn):
             line = line.rstrip().split('\t')
             if i == 0:
                 header = line
-                check_sample_header(header)
+                check_data_header(header,["sample","project"])
                 continue
             vals = []
             for possible_entry in possible_entries:
+                if possible_entry == "project":
+                    check_table(conn,"projects","name",line[header.index(possible_entry)])
                 if possible_entry in header:
                     vals.append(line[header.index(possible_entry)])
                 else:
@@ -40,12 +48,9 @@ def add_samples(samplefofn,conn):
               VALUES(?,?,?,?) '''
     add_sql_entries(conn,samples,sql)
 
-def check_data_header(header,entries):
-    for entry in entries:
-        if entry not in header:
-            sys.exit("%s not found" % entry)
 
 def add_data(datafn,conn):
+    print "Going through %s..." % datafn
     datapaths = []
     entries = ["data_path","sample_name","dna_source",
                "probes","date_added","sequencing_plex"]
@@ -58,6 +63,8 @@ def add_data(datafn,conn):
                 continue
             vals = []
             for entry in entries:
+                if entry == "sample_name":
+                    check_table(conn,"samples","name",line[header.index(entry)])
                 vals.append(line[header.index(entry)])
             vals = tuple(vals)
             datapaths.append(vals)

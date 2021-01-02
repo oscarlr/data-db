@@ -36,7 +36,7 @@ def add_project_entries(conn):
     projects = [
         ("Wayne-Flu",),
         ("Boyd-Healthy",),
-        ("STEMCELL",),
+        ("StemCell",),
         ("1KG",),
         ("GIAB",)
     ]
