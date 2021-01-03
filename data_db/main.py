@@ -34,7 +34,7 @@ def add_probes_entries(conn):
 
 def add_project_entries(conn):
     projects = [
-        ("Wayne-Flu",),
+        ("Wayne",),
         ("Boyd-Healthy",),
         ("StemCell",),
         ("1KG",),
