@@ -4,7 +4,7 @@ import sqlite3
 
 from data_db.common import add_sql_entries
 
-DB_PATH = "data.db"
+#DB_PATH = "data.db"
 
 def add_arguments(subparser):
     subparser.add_argument('samples',metavar='SAMPLES',help='samples fofn')
@@ -23,6 +23,14 @@ def check_table(conn,table,column,value):
     if len(rows) == 0:
         sys.exit("%s not found in table %s column %s" % (value,table,column))
 
+def check_ethnicity(ethnicity):
+    ethnicities = ["American Indian or Alaska Native","Asian",
+                   "Black or African American","Hispanic or Latino",
+                   "Native Hawaiian or Other Pacific Islander","White"]
+    if ethnicity not in ethnicities:
+        print "Pick an ethnicity from %s" % ",".join(ethnicities)
+        sys.exit("%s not allowed" % ethnicity)
+
 def add_samples(samplefofn,conn):
     print "Going through %s..." % samplefofn
     samples = []
@@ -38,6 +46,8 @@ def add_samples(samplefofn,conn):
             for possible_entry in possible_entries:
                 if possible_entry == "project":
                     check_table(conn,"projects","name",line[header.index(possible_entry)])
+                if possible_entry == "ethnicity":
+                    check_ethnicity(line[header.index(possible_entry)])
                 if possible_entry in header:
                     vals.append(line[header.index(possible_entry)])
                 else:
