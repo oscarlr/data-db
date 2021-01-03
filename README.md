@@ -15,7 +15,7 @@ data-db data.db stats outdir
 ```
 
 ## Getting existing databases
-This private repo, `https://github.com/oscarlr/UoL-Watson-data`, contains the SQL database with datapaths to data generated from the Watson lab. It is updated everytime data gets added to the database. Only users with access to the repo can access the database.
+This private repo, `https://github.com/oscarlr/UofL-Watson-data`, contains the SQL database with datapaths to data generated from the Watson lab. It is updated everytime data gets added to the database. Only users with access to the repo can access the database.
 
 ## Tables
 ```
