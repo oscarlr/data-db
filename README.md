@@ -25,6 +25,10 @@ data-db data.db add samples.txt data.txt
 
 The second file is a tab delimited file with the following columns: ```data_path, sample_name, dna_source, probes, date_added, sequencing_plex```. All columns are required. 
 
+### Example files:
+1. samples.txt: https://github.com/oscarlr/data-db/blob/main/examples/samples.txt
+2. data.txt: https://github.com/oscarlr/data-db/blob/main/examples/data.txt
+
 ## Generating stats
 ```
 data-db data.db stats outdir
