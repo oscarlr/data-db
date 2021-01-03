@@ -1,0 +1,26 @@
+sample	ethnicity	project
+110040504	White	StemCell
+RG1821	White	StemCell
+RG2284	White	StemCell
+CE0005797	White	StemCell
+110040975	Asian	StemCell
+RG2155	White	StemCell
+110046617	Black or African American	StemCell
+CE0005988	White	StemCell
+RG2378	White	StemCell
+RG2331	White	StemCell
+RG2037	White	StemCell
+110042713	White	StemCell
+CE0005786	White	StemCell
+110046119	White	StemCell
+RG1823	White	StemCell
+RG2459	White	StemCell
+RG1288	White	StemCell
+RG2379	Black or African American	StemCell
+CE0005924	Hispanic or Latino	StemCell
+RG1895	White	StemCell
+RG1849	White	StemCell
+RG2226	White	StemCell
+RG1889	White	StemCell
+RG1791	White	StemCell
+RG1212	White	StemCell
