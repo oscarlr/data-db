@@ -7,7 +7,7 @@ git clone https://github.com/oscarlr/data-db
 cd data-db
 python setup.py install
 
-# data-db <data bases> <command> <arguments...>
+# data-db <database> <command> <arguments...>
 data-db data.db add samples.txt data.txt
 data-db data.db stats outdir
 ```
