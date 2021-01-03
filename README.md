@@ -22,7 +22,7 @@ This private repo, `https://github.com/oscarlr/UofL-Watson-data`, contains the S
 https://github.com/oscarlr/data-db/blob/main/data_db/tables/tables.py
 ```
 
-## Adding to db
+## Adding capture data to db
 ```
 data-db data.db add samples.txt data.txt
 ```
