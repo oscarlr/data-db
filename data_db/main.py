@@ -9,7 +9,6 @@ from sqlite3 import Error
 
 from data_db.common import add_sql_entries
 
-DB_PATH = "data.db"
 
 def create_table(conn, create_table_sql):
     """ create a table from the create_table_sql statement
