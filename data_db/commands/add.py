@@ -59,7 +59,7 @@ def add_samples(samplefofn,conn):
     add_sql_entries(conn,samples,sql)
 
 
-def add_data(datafn,conn):
+def add_capture_data(datafn,conn):
     print "Going through %s..." % datafn
     datapaths = []
     entries = ["data_path","sample_name","dna_source",
@@ -84,5 +84,5 @@ def add_data(datafn,conn):
                 
 def main(args,conn):
     add_samples(args.samples,conn)
-    add_data(args.data,conn)
+    add_capture_data(args.data,conn)
 
