@@ -64,7 +64,8 @@ def open_db(db_path):
 def main():
     commands = [
         "stats",
-        "add"
+        "add",
+        "list"
     ]
 
     if len(sys.argv) < 3:

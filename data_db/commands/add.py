@@ -62,7 +62,7 @@ def add_samples(samplefofn,conn):
 def add_capture_data(datafn,conn):
     print "Going through %s..." % datafn
     datapaths = []
-    entries = ["data_path","sample_name","dna_source",
+    entries = ["data_path","sample_name","experiment_name","dna_source",
                "probes","date_added","sequencing_plex"]
     with open(datafn,'r') as datafh:
         for i,line in enumerate(datafh):
@@ -78,8 +78,8 @@ def add_capture_data(datafn,conn):
                 vals.append(line[header.index(entry)])
             vals = tuple(vals)
             datapaths.append(vals)
-    sql = ''' INSERT INTO capture (data_path,sample_name,dna_source,probes,date_added,sequencing_plex)
-              VALUES(?,?,?,?,?,?) '''
+    sql = ''' INSERT INTO capture (data_path,sample_name,experiment_name,dna_source,probes,date_added,sequencing_plex)
+              VALUES(?,?,?,?,?,?,?) '''
     add_sql_entries(conn,datapaths,sql)
                 
 def main(args,conn):
