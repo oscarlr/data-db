@@ -34,9 +34,9 @@ def add_probes_entries(conn):
 def add_project_entries(conn):
     projects = [
         ("Wayne",),
-        ("Boyd-Healthy",),
+        ("Boyd",),
         ("StemCell",),
-        ("1KG",),
+        ("1KGP",),
         ("GIAB",)
     ]
     sql = ''' INSERT OR IGNORE INTO projects (name)

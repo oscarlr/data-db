@@ -39,9 +39,11 @@ def get_column_entries(conn,table,column):
 def plot(conn,table,cats,outdir):
     for cat in cats:
         entries = pd.DataFrame(np.array(get_column_entries(conn,table,cat)),columns=[cat])
-        plt = sns.countplot(data=entries,x=cat)
         if cat == "ethnicity":
+            plt = sns.countplot(data=entries,x=cat,order=["White","Asian","Black or African American","Hispanic or Latino"])
             plt.set_xticklabels(["White","Asian","Black or\nAfrican American","Hispanic or\nLatino"])
+        else:
+            plt = sns.countplot(data=entries,x=cat)
         fig = plt.get_figure()
         fig.savefig("%s/%s.png" % (outdir,cat)) 
         fig.clf()
