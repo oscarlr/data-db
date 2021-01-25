@@ -10,7 +10,7 @@ project_name text NOT NULL,
 ethnicity text,
 population text,
 PRIMARY KEY (sample_name, project_name),
-FOREIGN KEY (project_name) REFERENCES projects (sample_name)
+FOREIGN KEY (project_name) REFERENCES projects (name)
 ); """
 
 probes = """ CREATE TABLE IF NOT EXISTS probes (

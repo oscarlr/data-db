@@ -24,7 +24,7 @@ def check_table(conn,table,column,value):
         sys.exit("%s not found in table %s column %s" % (value,table,column))
 
 def check_ethnicity(ethnicity):
-    ethnicities = ["American Indian or Alaska Native","Asian",
+    ethnicities = ["Unknown","American Indian or Alaska Native","Asian",
                    "Black or African American","Hispanic or Latino",
                    "Native Hawaiian or Other Pacific Islander","White"]
     if ethnicity not in ethnicities:
@@ -34,17 +34,17 @@ def check_ethnicity(ethnicity):
 def add_samples(samplefofn,conn):
     print "Going through %s..." % samplefofn
     samples = []
-    possible_entries = ["sample","project","ethnicity","population"]
+    possible_entries = ["sample_name","project_name","ethnicity","population"]
     with open(samplefofn,'r') as samplefofh:
         for i,line in enumerate(samplefofh):
             line = line.rstrip().split('\t')
             if i == 0:
                 header = line
-                check_data_header(header,["sample","project"])
+                check_data_header(header,["sample_name","project_name"])
                 continue
             vals = []
             for possible_entry in possible_entries:
-                if possible_entry == "project":
+                if possible_entry == "project_name":
                     check_table(conn,"projects","name",line[header.index(possible_entry)])
                 if possible_entry == "ethnicity":
                     check_ethnicity(line[header.index(possible_entry)])
@@ -54,7 +54,7 @@ def add_samples(samplefofn,conn):
                     vals.append("None")
             vals = tuple(vals)
             samples.append(vals)
-    sql = ''' INSERT OR IGNORE INTO samples (name,project_name,ethnicity,population) 
+    sql = ''' INSERT OR IGNORE INTO samples (sample_name,project_name,ethnicity,population) 
               VALUES(?,?,?,?) '''
     add_sql_entries(conn,samples,sql)
 
@@ -63,7 +63,7 @@ def add_capture_data(datafn,conn):
     print "Going through %s..." % datafn
     datapaths = []
     entries = ["data_path","sample_name","experiment_name","dna_source",
-               "probes","date_added","sequencing_plex"]
+               "probes","date_added"] #,"sequencing_plex"]
     with open(datafn,'r') as datafh:
         for i,line in enumerate(datafh):
             line = line.rstrip().split('\t')
@@ -74,12 +74,12 @@ def add_capture_data(datafn,conn):
             vals = []
             for entry in entries:
                 if entry == "sample_name":
-                    check_table(conn,"samples","name",line[header.index(entry)])
+                    check_table(conn,"samples","sample_name",line[header.index(entry)])
                 vals.append(line[header.index(entry)])
             vals = tuple(vals)
             datapaths.append(vals)
-    sql = ''' INSERT INTO capture (data_path,sample_name,experiment_name,dna_source,probes,date_added,sequencing_plex)
-              VALUES(?,?,?,?,?,?,?) '''
+    sql = ''' INSERT INTO capture (data_path,sample_name,experiment_name,dna_source,probes,date_added)
+              VALUES(?,?,?,?,?,?) '''
     add_sql_entries(conn,datapaths,sql)
                 
 def main(args,conn):
