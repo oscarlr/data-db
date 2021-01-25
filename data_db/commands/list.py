@@ -11,7 +11,7 @@ def add_arguments(subparser):
 
 def list_datasets(conn):
     cur = conn.cursor()
-    cur.execute("SELECT * FROM capture")
+    cur.execute("SELECT * FROM samples")
 
     header = list(map(lambda x: x[0], cur.description))
     rows = cur.fetchall()
